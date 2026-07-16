@@ -1,0 +1,18 @@
+package transformer.`export`
+
+import transformer.config.ConfigService
+import transformer.db.DatabaseService
+import zio._
+
+trait CsvExportService {
+  def exporting: UIO[Fiber.Runtime[Throwable, Nothing]]
+}
+
+object CsvExportService {
+  val live: ZLayer[ConfigService with DatabaseService, Nothing, CsvExportService] = ZLayer {
+    for {
+      configService <- ZIO.service[ConfigService]
+      dbService     <- ZIO.service[DatabaseService]
+    } yield new CsvExportServiceLive(configService, dbService)
+  }
+}
