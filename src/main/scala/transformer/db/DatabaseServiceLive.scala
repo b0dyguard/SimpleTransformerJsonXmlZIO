@@ -1,6 +1,6 @@
 package transformer.db
 
-import transformer.user.User
+import transformer.user.{User, UserRow}
 import zio._
 import slick.jdbc.H2Profile.api._
 

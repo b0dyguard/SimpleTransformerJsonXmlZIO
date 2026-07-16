@@ -11,10 +11,10 @@ trait HttpService {
 }
 
 object HttpService {
-  val live: ZLayer[DatabaseService with XmlMapperService, Nothing, UserRoutes] = ZLayer {
+  val live: ZLayer[DatabaseService with XmlMapperService, Nothing, HttpService] = ZLayer {
     for {
       dbService  <- ZIO.service[DatabaseService]
       xmlService <- ZIO.service[XmlMapperService]
-    } yield new UserRoutesLive(dbService, xmlService)
+    } yield new HttpServiceLive(dbService, xmlService)
   }
 }

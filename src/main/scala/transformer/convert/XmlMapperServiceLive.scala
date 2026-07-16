@@ -20,6 +20,6 @@ class XmlMapperServiceLive extends XmlMapperService {
   }
 
   override def errorXml(message: String): String = {
-    s"<response><error>$message</error><.response>"
+    s"<response><error>$message</error></response>"
   }
 }

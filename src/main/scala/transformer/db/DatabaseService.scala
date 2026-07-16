@@ -2,8 +2,9 @@ package transformer.db
 
 import zio._
 import slick.jdbc.H2Profile.api._
+
 import scala.concurrent.ExecutionContext
-import transformer.user.User
+import transformer.user.{User, UserRow}
 
 trait DatabaseService {
   def initDb: Task[Unit]
@@ -17,7 +18,7 @@ object DatabaseService {
     ZIO.acquireRelease(
       ZIO.attempt(Database.forURL(
         url = "jdbc:h2:mem:usersdb;DB_CLOSE_DELAY=-1",
-        driver = "ord.h2.Driver",
+        driver = "org.h2.Driver",
         user = "sa",
         password = ""
       ))

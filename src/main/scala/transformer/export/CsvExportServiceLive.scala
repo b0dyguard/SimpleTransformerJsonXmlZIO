@@ -1,7 +1,8 @@
 package transformer.`export`
 
 import transformer.config.ConfigService
-import transformer.db.{DatabaseService, UserRow}
+import transformer.db.DatabaseService
+import transformer.user.UserRow
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -12,7 +13,7 @@ import java.io.{File, FileWriter}
 
 class CsvExportServiceLive(configService: ConfigService, dbService: DatabaseService) extends CsvExportService {
 
-  override def exporting: UIO[Fiber.Runtime[Throwable, Nothing]] = {
+  override def exporting: UIO[Fiber.Runtime[Nothing, Long]] = {
     val interval = configService.config.intervalMinutes.minutes
 
     val exportTask = for {

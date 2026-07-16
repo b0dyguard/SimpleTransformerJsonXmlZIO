@@ -1,4 +1,4 @@
-package transformer.db
+package transformer.user
 
 case class UserRow(
                   id: Option[Int],

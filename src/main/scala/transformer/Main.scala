@@ -12,17 +12,18 @@ object Main extends ZIOAppDefault {
   override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = {
     val appLogic = for {
       _ <- ZIO.logInfo("Initializing Database..")
-      _ <- DatabaseService.init()
+      db <- ZIO.service[DatabaseService]
+      _ <- db.initDb
       _ <- ZIO.logInfo("Database successfully initialized.")
 
-      _ <- CsvExportService.exporting()
+      exporter <- ZIO.service[CsvExportService]
+      _ <- exporter.exporting
 
-      config <- ConfigService.getConfig
-      port = config.port
+      configService <- ZIO.service[ConfigService]
+      port = configService.config.port
 
-      routes <- HttpService.routes
-      _ <- ZIO.logInfo(s"Starting Netty HTTP Server on port $port")
-      _ <- Server.serve(routes).provideSome[Scope](Server.defaultWithPort(port))
+      httpService <- ZIO.service[HttpService]
+      routes = httpService.routes
     } yield ()
 
     appLogic.provide(

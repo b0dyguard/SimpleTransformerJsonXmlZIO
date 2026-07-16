@@ -5,7 +5,7 @@ import transformer.db.DatabaseService
 import zio._
 
 trait CsvExportService {
-  def exporting: UIO[Fiber.Runtime[Throwable, Nothing]]
+  def exporting: UIO[Fiber.Runtime[Nothing, Long]]
 }
 
 object CsvExportService {
