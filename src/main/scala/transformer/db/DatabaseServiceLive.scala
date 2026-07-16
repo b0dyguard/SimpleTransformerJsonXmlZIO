@@ -8,7 +8,7 @@ import scala.concurrent.ExecutionContext
 
 class DatabaseServiceLive(db: Database) extends DatabaseService {
 
-  private class UsersTable(tag: Tag) extends Table[UserRow](tag, "users") {
+  private class UsersTable(tag: slick.lifted.Tag) extends Table[UserRow](tag, "users") {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def name = column[String]("name")
     def age = column[Int]("age")

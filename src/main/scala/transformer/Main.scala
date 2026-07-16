@@ -7,8 +7,11 @@ import transformer.db.DatabaseService
 import transformer.routes.HttpService
 import zio._
 import zio.http._
+import zio.logging.backend.SLF4J
 
 object Main extends ZIOAppDefault {
+  override val bootstrap: ZLayer[ZIOAppArgs, Any, Any] = Runtime.removeDefaultLoggers >>> SLF4J.slf4j
+
   override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = {
     val appLogic = for {
       _ <- ZIO.logInfo("Initializing Database..")
