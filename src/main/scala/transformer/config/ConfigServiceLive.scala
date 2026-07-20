@@ -1,3 +1,3 @@
 package transformer.config
 
-class ConfigServiceLive(val config: AppConfig) extends ConfigService
+case class ConfigServiceLive(config: AppConfig) extends ConfigService

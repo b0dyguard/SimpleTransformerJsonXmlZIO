@@ -30,13 +30,13 @@ object ConfigService {
 
       appConfig = AppConfig(port, interval, dir)
       _ <- ZIO.logInfo(
-        s"""\n|====================================================
-            |CONFIGURATION LOADED SUCCESS:
-            |   port:            $port
-            |   intervalMinutes: $interval
-            |   targetDirectory: $dir
-            |====================================================\n""".stripMargin
+        s"""\n
+            Configuration loaded success:
+               port:            $port
+               intervalMinutes: $interval
+               targetDirectory: $dir
+            \n""".stripMargin
       )
-    } yield new ConfigServiceLive(appConfig)
+    } yield ConfigServiceLive(appConfig)
   }
 }

@@ -4,7 +4,6 @@ import transformer.convert.XmlMapperService
 import transformer.db.DatabaseService
 import zio._
 import zio.http._
-import zio.json._
 
 trait HttpService {
   def routes: Routes[Any, Response]

@@ -60,7 +60,7 @@ class CsvExportServiceLive(configService: ConfigService, dbService: DatabaseServ
         }
         writer.append(s"${u.currentStatusActive}\n")
       }
-      println(s"[BG] Data successfully uploaded to file: ${outputFile.getAbsolutePath}")
+      ZIO.logInfo(s"[BG] Data successfully uploaded to file: ${outputFile.getAbsolutePath}")
     } finally {
       writer.close()
     }

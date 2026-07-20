@@ -3,7 +3,6 @@ package transformer.db
 import zio._
 import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.ExecutionContext
 import transformer.user.{User, UserRow}
 
 trait DatabaseService {
@@ -14,7 +13,7 @@ trait DatabaseService {
 }
 
 object DatabaseService {
-  val dbLayer: ZLayer[Any, Throwable, Database] = ZLayer.scoped {
+  private val dbLayer: ZLayer[Any, Throwable, Database] = ZLayer.scoped {
     ZIO.acquireRelease(
       ZIO.attempt(Database.forURL(
         url = "jdbc:h2:mem:usersdb;DB_CLOSE_DELAY=-1",
