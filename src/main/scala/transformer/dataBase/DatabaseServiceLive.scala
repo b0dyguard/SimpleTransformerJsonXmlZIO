@@ -1,4 +1,4 @@
-package transformer.db
+package transformer.dataBase
 
 import transformer.user.{User, UserRow}
 import zio._
@@ -8,7 +8,7 @@ import scala.concurrent.ExecutionContext
 
 class DatabaseServiceLive(db: Database) extends DatabaseService {
 
-  case class UsersTable(tag: slick.lifted.Tag) extends Table[UserRow](tag, "users") {
+  case class UsersTable(tag: slick.lifted.Tag) extends Table[UserRow](tag, "users") {                 //в model.storage
     private def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def name = column[String]("name")
     def age = column[Int]("age")

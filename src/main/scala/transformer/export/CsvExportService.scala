@@ -1,7 +1,7 @@
 package transformer.`export`
 
 import transformer.config.ConfigService
-import transformer.db.DatabaseService
+import transformer.dataBase.DatabaseService
 import zio._
 
 trait CsvExportService {

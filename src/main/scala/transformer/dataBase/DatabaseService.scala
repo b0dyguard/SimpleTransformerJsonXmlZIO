@@ -1,4 +1,4 @@
-package transformer.db
+package transformer.dataBase
 
 import zio._
 import slick.jdbc.H2Profile.api._
