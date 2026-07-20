@@ -1,6 +1,6 @@
-package transformer.convert
+package transformer.service.convert
 
-import transformer.user.User
+import transformer.model.units.User
 import zio._
 
 trait XmlMapperService {

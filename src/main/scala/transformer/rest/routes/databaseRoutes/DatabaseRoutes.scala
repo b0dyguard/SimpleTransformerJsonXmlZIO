@@ -1,40 +1,14 @@
-package transformer.routes
+package transformer.rest.routes.databaseRoutes
 
-import transformer.convert.XmlMapperService
-import transformer.dataBase.DatabaseService
-import transformer.user.User
+import transformer.model.units.User
+import transformer.service.convert.XmlMapperService
+import transformer.service.database.DatabaseService
+import zio._
 import zio.http._
 import zio.json._
-import zio._
 
-class HttpServiceLive(dbService: DatabaseService, xmlService: XmlMapperService) extends HttpService {
-
-  override def routes: Routes[Any, Response] = Routes(
-
-    Method.POST / "convert" -> handler { (req: Request) =>
-      for {
-        bodyStr <- req.body.asString.orDie
-        userDefault = bodyStr.fromJson[User]
-        response <- userDefault match {
-          case Left(err) => ZIO.succeed {
-            val errXml = xmlService.errorXml(s"Invalid JSON: $err")
-            Response(status = Status.BadRequest, body = Body.fromString(errXml).contentType(MediaType.application.xml))
-          }
-          case Right(user) => if (user.name.equalsIgnoreCase("Виталий")) {
-            ZIO.succeed {
-              val errXml = xmlService.errorXml(s"This user does not exist.")
-              Response(status = Status.BadRequest, body = Body.fromString(errXml).contentType(MediaType.application.xml))
-            }
-          } else {
-            xmlService.toXml(user).map { xml =>
-              Response(status = Status.Ok, body = Body.fromString(xml).contentType(MediaType.application.xml))
-            }.catchAll { err =>
-              ZIO.succeed(Response(status = Status.InternalServerError, body = Body.fromString(s"Error: ${err.getMessage}")))
-            }
-          }
-        }
-      } yield response
-    },
+class DatabaseRoutes(dbService: DatabaseService, xmlService: XmlMapperService) {
+  val routes: Routes[Any, Response] = Routes(
 
     Method.POST / "create" -> handler { (req: Request) =>
       for {
@@ -89,4 +63,8 @@ class HttpServiceLive(dbService: DatabaseService, xmlService: XmlMapperService) 
       }
     }
   )
+}
+
+object DatabaseRoutes {
+  def apply(dbService: DatabaseService, xmlService: XmlMapperService) = new DatabaseRoutes(dbService, xmlService)
 }

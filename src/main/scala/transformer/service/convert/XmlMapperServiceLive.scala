@@ -1,9 +1,9 @@
-package transformer.convert
+package transformer.service.convert
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import transformer.user.User
+import transformer.model.units.User
 import zio._
 
 class XmlMapperServiceLive extends XmlMapperService {

@@ -1,10 +1,11 @@
 package transformer
 
-import transformer.`export`.CsvExportService
-import transformer.config.ConfigService
-import transformer.convert.XmlMapperService
-import transformer.dataBase.DatabaseService
-import transformer.routes.HttpService
+import transformer.config.database.H2Database
+import transformer.service.`export`.CsvExportService
+import transformer.service.config.ConfigService
+import transformer.service.convert.XmlMapperService
+import transformer.service.database.DatabaseService
+import transformer.service.server.HttpService
 import zio._
 import zio.http._
 import zio.logging.backend.SLF4J
@@ -38,6 +39,7 @@ object Boot extends ZIOAppDefault {
 
     program.provideSome[Scope](
       ConfigService.live,
+      H2Database.live,
       DatabaseService.live,
       XmlMapperService.live,
       CsvExportService.live,

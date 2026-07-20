@@ -1,7 +1,7 @@
-package transformer.routes
+package transformer.service.server
 
-import transformer.convert.XmlMapperService
-import transformer.dataBase.DatabaseService
+import transformer.service.convert.XmlMapperService
+import transformer.service.database.DatabaseService
 import zio._
 import zio.http._
 

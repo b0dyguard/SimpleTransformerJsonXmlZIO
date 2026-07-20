@@ -1,9 +1,10 @@
-package transformer.config
+package transformer.service.config
 
+import transformer.config.app.AppConfig
 import zio._
 
 import java.io.FileNotFoundException
-import java.util.Properties                         //TypeSafe config. конфиг выводится автоматически
+import java.util.Properties                         //использовать typesafe config.
 
 trait ConfigService {
   def config: AppConfig
