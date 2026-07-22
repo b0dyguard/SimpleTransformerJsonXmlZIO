@@ -1,4 +1,4 @@
-package transformer.rest.routes.convertRoute
+package transformer.rest
 
 import transformer.model.units.User
 import transformer.service.convert.XmlMapperService
@@ -6,8 +6,9 @@ import zio.ZIO
 import zio.http._
 import zio.json._
 
-class ConvertRoute(xmlService: XmlMapperService) {
-  val route: Routes[Any, Response] = Routes(
+
+case class ConvertRoute(xmlService: XmlMapperService) {
+  val routes: Routes[Any, Response] = Routes(
     Method.POST / "convert" -> handler { (req: Request) =>
       for {
         bodyStr <- req.body.asString.orDie
@@ -33,8 +34,4 @@ class ConvertRoute(xmlService: XmlMapperService) {
       } yield response
     }
   )
-}
-
-object ConvertRoute {
-  def apply(xmlService: XmlMapperService) = new ConvertRoute(xmlService)
 }

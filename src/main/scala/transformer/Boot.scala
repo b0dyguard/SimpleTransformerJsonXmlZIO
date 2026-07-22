@@ -1,11 +1,14 @@
 package transformer
 
-import transformer.config.database.H2Database
+import transformer.model.database.SeedData
+import transformer.model.mappers.JacksonXmlMapper
+import transformer.model.config.TypesafeConfigLoader
 import transformer.service.`export`.CsvExportService
 import transformer.service.config.ConfigService
 import transformer.service.convert.XmlMapperService
 import transformer.service.database.DatabaseService
 import transformer.service.server.HttpService
+import transformer.storage.connection.DbConnection
 import zio._
 import zio.http._
 import zio.logging.backend.SLF4J
@@ -15,32 +18,34 @@ object Boot extends ZIOAppDefault {
 
   override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = {
     val program = for {
-      _ <- ZIO.logInfo("Initializing application components..")
+      _               <- ZIO.logInfo("Initializing application components..")
 
-      dbService <- ZIO.service[DatabaseService]
-      _ <- dbService.initDb
-      _ <- ZIO.logInfo("Database successfully initialized.")
+      dbService       <- ZIO.service[DatabaseService]
+      _               <- dbService.initDb(SeedData.initialUses)
+      _               <- ZIO.logInfo("Database successfully initialized.")
 
-      csvService <- ZIO.service[CsvExportService]
-      _ <- csvService.exporting
-      _ <- ZIO.logInfo("CSV Export service successfully started.")
+      csvService      <- ZIO.service[CsvExportService]
+      _               <- csvService.exporting
+      _               <- ZIO.logInfo("CSV Export service successfully started.")
 
-      configService <- ZIO.service[ConfigService]
-      port = configService.config.port
+      configService   <- ZIO.service[ConfigService]
+      port            = configService.config.port
 
-      httpService  <- ZIO.service[HttpService]
-      _            <- ZIO.logInfo(s"Starting HTTP Server on port $port..")
-      serverConfig = Server.Config.default.port(port)
-      _            <- Server.serve(httpService.routes).provideSome[Scope](
+      httpService     <- ZIO.service[HttpService]
+      _               <- ZIO.logInfo(s"Starting HTTP Server on port $port..")
+      serverConfig    = Server.Config.default.port(port)
+      _               <- Server.serve(httpService.routes).provideSome[Scope](
         Server.live,
         ZLayer.succeed(serverConfig)
       )
     } yield ()
 
     program.provideSome[Scope](
+      TypesafeConfigLoader.live,
       ConfigService.live,
-      H2Database.live,
+      DbConnection.live,
       DatabaseService.live,
+      JacksonXmlMapper.live,
       XmlMapperService.live,
       CsvExportService.live,
       HttpService.live

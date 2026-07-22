@@ -1,19 +1,12 @@
 package transformer.service.convert
 
-import com.fasterxml.jackson.databind.SerializationFeature
+
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import transformer.model.units.User
 import zio._
 
-class XmlMapperServiceLive extends XmlMapperService {
 
-  private val mapper = {
-    val m = new XmlMapper()
-    m.registerModule(DefaultScalaModule)
-    m.enable(SerializationFeature.INDENT_OUTPUT)
-    m
-  }
+case class XmlMapperServiceLive(mapper: XmlMapper) extends XmlMapperService {
 
   override def toXml(user: User): Task[String] = ZIO.attempt {
     mapper.writeValueAsString(user)

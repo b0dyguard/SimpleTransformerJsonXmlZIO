@@ -11,7 +11,7 @@
             <option value="C:\Users\user\Desktop\git-lab\SimpleTransformerJsonXmlZIO\project" />
           </set>
         </option>
-        <option name="sbtVersion" value="2.0.2" />
+        <option name="sbtVersion" value="1.10.1" />
         <option name="separateProdAndTestSourcesIsExplicit" value="true" />
       </SbtProjectSettings>
     </option>

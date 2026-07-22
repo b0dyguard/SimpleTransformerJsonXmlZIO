@@ -1,9 +1,9 @@
-package transformer.config.database
+package transformer.storage.connection
 
-import zio._
 import slick.jdbc.H2Profile.api._
+import zio._
 
-object H2Database {
+object DbConnection {
   val live: ZLayer[Any, Throwable, Database] = ZLayer.scoped {
     ZIO.acquireRelease(
       ZIO.attempt(Database.forURL(

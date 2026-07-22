@@ -9,10 +9,6 @@ trait CsvExportService {
 }
 
 object CsvExportService {
-  val live: ZLayer[ConfigService with DatabaseService, Nothing, CsvExportService] = ZLayer {
-    for {
-      configService <- ZIO.service[ConfigService]
-      dbService     <- ZIO.service[DatabaseService]
-    } yield new CsvExportServiceLive(configService, dbService)
-  }
+  val live: ZLayer[ConfigService with DatabaseService, Nothing, CsvExportService] =
+    ZLayer.fromFunction((cfgService: ConfigService, dbService: DatabaseService) => CsvExportServiceLive(cfgService, dbService))
 }

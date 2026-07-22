@@ -1,4 +1,4 @@
-package transformer.rest.routes.databaseRoutes
+package transformer.rest
 
 import transformer.model.units.User
 import transformer.service.convert.XmlMapperService
@@ -7,7 +7,8 @@ import zio._
 import zio.http._
 import zio.json._
 
-class DatabaseRoutes(dbService: DatabaseService, xmlService: XmlMapperService) {
+
+case class DatabaseRoutes(dbService: DatabaseService, xmlService: XmlMapperService) {
   val routes: Routes[Any, Response] = Routes(
 
     Method.POST / "create" -> handler { (req: Request) =>
@@ -63,8 +64,4 @@ class DatabaseRoutes(dbService: DatabaseService, xmlService: XmlMapperService) {
       }
     }
   )
-}
-
-object DatabaseRoutes {
-  def apply(dbService: DatabaseService, xmlService: XmlMapperService) = new DatabaseRoutes(dbService, xmlService)
 }

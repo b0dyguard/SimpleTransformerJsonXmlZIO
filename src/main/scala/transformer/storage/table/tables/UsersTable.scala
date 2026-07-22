@@ -1,7 +1,9 @@
-package transformer.storage.schema.tables
+package transformer.storage.table.tables
+
 
 import slick.jdbc.H2Profile.api._
 import transformer.model.units.UserRow
+
 
 class UsersTable(tag: slick.lifted.Tag) extends Table[UserRow](tag, "users") {
   private def id = column[Int]("id", O.PrimaryKey, O.AutoInc)

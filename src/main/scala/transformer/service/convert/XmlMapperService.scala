@@ -1,7 +1,10 @@
 package transformer.service.convert
 
+
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import transformer.model.units.User
 import zio._
+
 
 trait XmlMapperService {
   def toXml(user: User): Task[String]
@@ -9,5 +12,6 @@ trait XmlMapperService {
 }
 
 object XmlMapperService {
-  val live: ZLayer[Any, Nothing, XmlMapperService] = ZLayer.succeed(new XmlMapperServiceLive)
+  val live: ZLayer[XmlMapper, Nothing, XmlMapperService] =
+    ZLayer.fromFunction((mapper: XmlMapper) => XmlMapperServiceLive(mapper))
 }
