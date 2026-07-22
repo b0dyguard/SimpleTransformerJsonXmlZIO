@@ -11,6 +11,8 @@ trait DatabaseService {
   def saveUser(user: User): Task[Unit]
   def findUser(name: String, age: Int, actualWork: String): Task[Option[User]]
   def listAllUsers: Task[Seq[UserRow]]
+  def updateUser(id: Int, user: User): Task[Boolean]
+  def deleteUser(id: Int): Task[Boolean]
 }
 
 object DatabaseService {

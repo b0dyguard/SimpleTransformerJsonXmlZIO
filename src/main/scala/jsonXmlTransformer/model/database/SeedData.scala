@@ -3,7 +3,7 @@ package jsonXmlTransformer.model.database
 import jsonXmlTransformer.model.units.UserRow
 
 object SeedData {
-  val initialUses: Seq[UserRow] = Seq(
+  val initialUsers: Seq[UserRow] = Seq(
     UserRow(None, "Витя", 40, "УАЗ", "Улгу, Политех", currentStatusActive = true),
     UserRow(None, "Артем", 22, "Ультра", "УлГПУ, Улет", currentStatusActive = true),
     UserRow(None, "Алексей", 23, "Автозавод", "КЭИ, Яндекс-доставка", currentStatusActive = false),

@@ -21,7 +21,7 @@ object Boot extends ZIOAppDefault {
       _               <- ZIO.logInfo("Initializing application components..")
 
       dbService       <- ZIO.service[DatabaseService]
-      _               <- dbService.initDb(SeedData.initialUses)
+      _               <- dbService.initDb(SeedData.initialUsers)
       _               <- ZIO.logInfo("Database successfully initialized.")
 
       csvService      <- ZIO.service[CsvExportService]

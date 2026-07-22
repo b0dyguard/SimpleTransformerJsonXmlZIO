@@ -35,6 +35,7 @@ case class DatabaseRoutes(dbService: DatabaseService, xmlService: XmlMapperServi
       } yield response
     },
 
+
     Method.GET / "read" -> handler { (req: Request) =>
       val nameOpt = req.queryParam("name").filter(_.nonEmpty)
       val ageOpt = req.queryParam("age").flatMap(_.toIntOption)
@@ -60,6 +61,68 @@ case class DatabaseRoutes(dbService: DatabaseService, xmlService: XmlMapperServi
         ZIO.succeed {
           val errXml = xmlService.errorXml(s"Internal error: ${err.getMessage}")
           Response(status = Status.InternalServerError, body = Body.fromString(errXml).contentType(MediaType.application.xml))
+        }
+      }
+    },
+
+
+    Method.PUT / "update" -> handler { (req: Request) =>
+      val idOpt = req.queryParam("id").flatMap(_.toIntOption)
+      idOpt match {
+        case Some(id) =>
+          for {
+            bodyStr <- req.body.asString.orDie
+            userJson = bodyStr.fromJson[User]
+            response <- userJson match {
+              case Left(err) => ZIO.succeed {
+                val errXml = xmlService.errorXml(s"Invalid JSON: $err")
+                Response(status = Status.BadRequest, body = Body.fromString(errXml).contentType(MediaType.application.xml))
+              }
+              case Right(user) => dbService.updateUser(id, user).map { updated =>
+                if (updated) {
+                  val sucXml = "<response>\n<status>success</status>\n<message>User successfully updated.</message>\n</response>"
+                  Response(status = Status.Ok, body = Body.fromString(sucXml).contentType(MediaType.application.xml))
+                } else {
+                  val errXml = xmlService.errorXml(s"User with id $id not found")
+                  Response(status = Status.NotFound, body = Body.fromString(errXml).contentType(MediaType.application.xml))
+                }
+              }.catchAll { err =>
+                ZIO.succeed {
+                  val errXml = xmlService.errorXml(s"Server error: ${err.getMessage}")
+                  Response(status = Status.InternalServerError, body = Body.fromString(errXml).contentType(MediaType.application.xml))
+                }
+              }
+            }
+          } yield response
+
+        case None => ZIO.succeed {
+          val errXml = xmlService.errorXml("Missing required parameter: id")
+          Response(status = Status.BadRequest, body = Body.fromString(errXml).contentType(MediaType.application.xml))
+        }
+      }
+    },
+
+
+    Method.DELETE / "delete" -> handler { (req: Request) =>
+      val idOpt = req.queryParam("id").flatMap(_.toIntOption)
+      idOpt match {
+        case Some(id) => dbService.deleteUser(id).map { deleted =>
+          if (deleted) {
+            val sucXml = "<response>\n<status>success</status>\n<message>User successfully deleted.</message>\n</response>"
+            Response(status = Status.Ok, body = Body.fromString(sucXml).contentType(MediaType.application.xml))
+          } else {
+            val errXml = xmlService.errorXml(s"User with id $id not found")
+            Response(status = Status.NotFound, body = Body.fromString(errXml).contentType(MediaType.application.xml))
+          }
+        }.catchAll { err =>
+          ZIO.succeed {
+            val errXml = xmlService.errorXml(s"Server error: ${err.getMessage}")
+            Response(status = Status.InternalServerError, body = Body.fromString(errXml).contentType(MediaType.application.xml))
+          }
+        }
+        case None => ZIO.succeed {
+          val errXml = xmlService.errorXml("Missing required parameter: id")
+          Response(status = Status.BadRequest, body = Body.fromString(errXml).contentType(MediaType.application.xml))
         }
       }
     }

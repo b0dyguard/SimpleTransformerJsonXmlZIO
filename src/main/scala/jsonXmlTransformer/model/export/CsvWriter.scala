@@ -7,7 +7,6 @@ import java.io.{File, FileWriter}
 
 object CsvWriter {
   def write(outputFile: File, users: Seq[UserRow]): Task[Unit] = {
-
     ZIO.acquireReleaseWith(
       ZIO.attemptBlocking(new FileWriter(outputFile, false))
     )(writer => ZIO.attemptBlocking(writer.close()).ignore) { writer =>
