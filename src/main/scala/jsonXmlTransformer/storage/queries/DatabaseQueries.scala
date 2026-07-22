@@ -10,8 +10,8 @@ object DatabaseQueries {
 
   def init(seedUsers: Seq[UserRow]): DBIO[Unit] = {
     DBIO.seq(
-      usersQuery.schema.createIfNotExists,
-      usersQuery.delete,
+      usersQuery.schema.drop.asTry,
+      usersQuery.schema.create,
       usersQuery ++= seedUsers
     )
   }
@@ -46,19 +46,4 @@ object DatabaseQueries {
   }
 
   def listAll: DBIO[Seq[UserRow]] = usersQuery.result
-
-  def update(id: Int, user: User): DBIO[Int] = {
-    usersQuery
-      .filter(_.id == id)
-      .map(u => (u.name, u.age, u.actualWork, u.previousWorks, u.currentStatusActive))
-      .update((
-        user.name,
-        user.age,
-        user.actualWork,
-        if (user.previousWorks != null) user.previousWorks.mkString(", ") else "",
-        user.currentStatusActive
-      ))
-  }
-
-  def delete(id: Int): DBIO[Int] = usersQuery.filter(_.id == id).delete
 }
