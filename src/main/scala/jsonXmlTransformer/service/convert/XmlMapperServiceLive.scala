@@ -1,0 +1,18 @@
+package jsonXmlTransformer.service.convert
+
+
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import jsonXmlTransformer.model.units.User
+import zio._
+
+
+case class XmlMapperServiceLive(mapper: XmlMapper) extends XmlMapperService {
+
+  override def toXml(user: User): Task[String] = ZIO.attempt {
+    mapper.writeValueAsString(user)
+  }
+
+  override def errorXml(message: String): String = {
+    s"<response><error>$message</error></response>"
+  }
+}
