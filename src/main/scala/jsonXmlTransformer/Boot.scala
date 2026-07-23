@@ -34,13 +34,13 @@ object Boot extends ZIOAppDefault {
       httpService     <- ZIO.service[HttpService]
       _               <- ZIO.logInfo(s"Starting HTTP Server on port $port..")
       serverConfig    = Server.Config.default.port(port)
-      _               <- Server.serve(httpService.routes).provideSome[Scope](
+      _               <- Server.serve(httpService.routes).provide(
         Server.live,
         ZLayer.succeed(serverConfig)
       )
     } yield ()
 
-    program.provideSome[Scope](
+    program.provide(
       TypesafeConfigLoader.live,
       ConfigService.live,
       DatabaseConnection.live,

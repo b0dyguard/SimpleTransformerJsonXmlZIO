@@ -3,8 +3,6 @@ package jsonXmlTransformer.storage.queries
 import slick.jdbc.H2Profile.api._
 import jsonXmlTransformer.model.units.{User, UserRow}
 import jsonXmlTransformer.storage.table.TableSchema._
-import slick.dbio.Effect
-import slick.sql.FixedSqlAction
 
 import scala.concurrent.ExecutionContext
 
