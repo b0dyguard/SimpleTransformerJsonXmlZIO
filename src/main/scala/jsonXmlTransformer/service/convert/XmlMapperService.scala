@@ -9,6 +9,7 @@ import zio._
 trait XmlMapperService {
   def toXml(user: User): Task[String]
   def errorXml(message: String): String
+  def successXml(message: String): String
 }
 
 object XmlMapperService {

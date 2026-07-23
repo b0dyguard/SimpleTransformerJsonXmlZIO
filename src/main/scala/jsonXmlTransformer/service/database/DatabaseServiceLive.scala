@@ -20,4 +20,10 @@ case class DatabaseServiceLive(db: Database) extends DatabaseService {
 
   override def listAllUsers: Task[Seq[UserRow]] =
     ZIO.fromFuture(_ => db.run(DatabaseQueries.listAll))
+
+  override def updateUser(oldName: String, oldAge: Int, oldWork: String, newUser: UserRow): Task[Int] =
+    ZIO.fromFuture(_ => db.run(DatabaseQueries.update(oldName, oldAge, oldWork, newUser)))
+
+  override def deleteUser(name: String, age: Int, work: String): Task[Int] =
+    ZIO.fromFuture(_ => db.run(DatabaseQueries.delete(name, age, work)))
 }

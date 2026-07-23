@@ -3,6 +3,8 @@ package jsonXmlTransformer.storage.queries
 import slick.jdbc.H2Profile.api._
 import jsonXmlTransformer.model.units.{User, UserRow}
 import jsonXmlTransformer.storage.table.TableSchema._
+import slick.dbio.Effect
+import slick.sql.FixedSqlAction
 
 import scala.concurrent.ExecutionContext
 
@@ -46,4 +48,26 @@ object DatabaseQueries {
   }
 
   def listAll: DBIO[Seq[UserRow]] = usersQuery.result
+
+  def update(name: String, age: Int, work: String, newUser: UserRow): DBIO[Int] = {
+    usersQuery
+      .filter(u =>
+      u.name === name &&
+      u.age === age &&
+      u.actualWork === work
+      )
+      .map(u => (u.name, u.age, u.actualWork, u.previousWorks, u.currentStatusActive))
+      .update((newUser.name, newUser.age, newUser.actualWork, newUser.previousWorks, newUser.currentStatusActive))
+  }
+
+  def delete(name: String, age: Int, actualWork: String): DBIO[Int] = {
+    usersQuery
+      .filter(u =>
+      u.name === name &&
+      u.age === age &&
+      u.actualWork === actualWork
+      )
+      .delete
+  }
+
 }

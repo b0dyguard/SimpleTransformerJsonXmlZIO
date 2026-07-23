@@ -13,6 +13,10 @@ case class XmlMapperServiceLive(mapper: XmlMapper) extends XmlMapperService {
   }
 
   override def errorXml(message: String): String = {
-    s"<response><error>$message</error></response>"
+    s"<response>\n<status>error</status>\n<message>$message</message>\n</response>"
+  }
+
+  override def successXml(message: String): String = {
+    s"<response>\n<status>success</status>\n<message>$message</message>\n</response>"
   }
 }

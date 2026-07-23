@@ -8,13 +8,13 @@ import jsonXmlTransformer.service.config.ConfigService
 import jsonXmlTransformer.service.convert.XmlMapperService
 import jsonXmlTransformer.service.database.DatabaseService
 import jsonXmlTransformer.service.server.HttpService
-import jsonXmlTransformer.storage.connection.DbConnection
+import jsonXmlTransformer.storage.connection.DatabaseConnection
 import zio._
 import zio.http._
 import zio.logging.backend.SLF4J
 
 object Boot extends ZIOAppDefault {
-  override val bootstrap: ZLayer[ZIOAppArgs, Any, Any] = Runtime.removeDefaultLoggers >>> SLF4J.slf4j
+  override val bootstrap: ZLayer[ZIOAppArgs, Any, Any] = Runtime.removeDefaultLoggers ++ SLF4J.slf4j
 
   override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = {
     val program = for {
@@ -43,7 +43,7 @@ object Boot extends ZIOAppDefault {
     program.provideSome[Scope](
       TypesafeConfigLoader.live,
       ConfigService.live,
-      DbConnection.live,
+      DatabaseConnection.live,
       DatabaseService.live,
       JacksonXmlMapper.live,
       XmlMapperService.live,
