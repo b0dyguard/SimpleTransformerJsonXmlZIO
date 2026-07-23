@@ -18,12 +18,12 @@ object DatabaseQueries {
 
   def save(user: User): DBIO[Int] = {
     val row = UserRow(
-      id = None,
-      name = user.name,
-      age = user.age,
-      actualWork = user.actualWork,
-      previousWorks = if (user.previousWorks != null) user.previousWorks.mkString(", ") else "",
-      currentStatusActive = user.currentStatusActive
+      None,
+      user.name,
+      user.age,
+      user.actualWork,
+      if (user.previousWorks != null) user.previousWorks.mkString(", ") else "",
+      user.currentStatusActive
     )
     usersQuery += row
   }
