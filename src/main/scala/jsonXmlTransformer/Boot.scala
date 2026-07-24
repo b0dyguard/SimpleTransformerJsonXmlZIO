@@ -1,6 +1,5 @@
 package jsonXmlTransformer
 
-import jsonXmlTransformer.model.database.SeedData
 import jsonXmlTransformer.model.mappers.JacksonXmlMapper
 import jsonXmlTransformer.model.config.TypesafeConfigLoader
 import jsonXmlTransformer.service.`export`.CsvExportService
@@ -9,6 +8,7 @@ import jsonXmlTransformer.service.convert.XmlMapperService
 import jsonXmlTransformer.service.database.DatabaseService
 import jsonXmlTransformer.service.server.HttpService
 import jsonXmlTransformer.storage.connection.DatabaseConnection
+import jsonXmlTransformer.storage.queries.DatabaseQueries
 import zio._
 import zio.http._
 import zio.logging.backend.SLF4J
@@ -21,7 +21,7 @@ object Boot extends ZIOAppDefault {
       _               <- ZIO.logInfo("Initializing application components..")
 
       dbService       <- ZIO.service[DatabaseService]
-      _               <- dbService.initDb(SeedData.initialUsers)
+      _               <- dbService.initDb
       _               <- ZIO.logInfo("Database successfully initialized.")
 
       csvService      <- ZIO.service[CsvExportService]
@@ -44,6 +44,7 @@ object Boot extends ZIOAppDefault {
       TypesafeConfigLoader.live,
       ConfigService.live,
       DatabaseConnection.live,
+      DatabaseQueries.live,
       DatabaseService.live,
       JacksonXmlMapper.live,
       XmlMapperService.live,

@@ -1,9 +1,9 @@
-package jsonXmlTransformer.model.database
+package jsonXmlTransformer.storage.queries.seedData
 
 import jsonXmlTransformer.model.units.UserRow
 
-object SeedData {
-  val initialUsers: Seq[UserRow] = Seq(
+object SeedUsers {
+  val users: Seq[UserRow] = Seq(
     UserRow(None, "Витя", 40, "УАЗ", "Улгу, Политех", currentStatusActive = true),
     UserRow(None, "Артем", 22, "Ультра", "УлГПУ, Улет", currentStatusActive = true),
     UserRow(None, "Алексей", 23, "Автозавод", "КЭИ, Яндекс-доставка", currentStatusActive = false),
@@ -11,4 +11,5 @@ object SeedData {
     UserRow(None, "Елена", 24, "Тинькофф", "УлГТУ, Альфа-Банк", currentStatusActive = true),
     UserRow(None, "Сергей", 25, "Ростелеком", "УлГУ, Билайн", currentStatusActive = false)
   )
+
 }

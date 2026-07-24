@@ -22,6 +22,7 @@ case class User(
                @JsonProperty("current_status_active")
                currentStatusActive: Boolean
                )
+
 object User {
   implicit val codec: JsonCodec[User] = DeriveJsonCodec.gen[User]
 }

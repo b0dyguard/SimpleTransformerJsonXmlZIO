@@ -1,13 +1,13 @@
 package jsonXmlTransformer.service.database
 
 
-import slick.jdbc.H2Profile.api._
+import jsonXmlTransformer.config.QueriesConfig
 import jsonXmlTransformer.model.units.{User, UserRow}
 import zio._
 
 
 trait DatabaseService {
-  def initDb(seedUsers: Seq[UserRow]): Task[Unit]
+  def initDb: Task[Unit]
   def saveUser(user: User): Task[Int]
   def findUser(name: String, age: Int, actualWork: String): Task[Option[User]]
   def listAllUsers: Task[Seq[UserRow]]
@@ -16,5 +16,5 @@ trait DatabaseService {
 }
 
 object DatabaseService {
-  val live: ZLayer[Database, Nothing, DatabaseService] = ZLayer.fromFunction((db: Database) => DatabaseServiceLive(db))
+  val live: ZLayer[QueriesConfig, Nothing, DatabaseService] = ZLayer.fromFunction((queries: QueriesConfig) => DatabaseServiceLive(queries))
 }

@@ -1,29 +1,28 @@
 package jsonXmlTransformer.service.database
 
 
-import slick.jdbc.H2Profile.api._
+import jsonXmlTransformer.config.QueriesConfig
 import jsonXmlTransformer.model.units.{User, UserRow}
-import jsonXmlTransformer.storage.queries.DatabaseQueries
 import zio._
 
 
-case class DatabaseServiceLive(db: Database) extends DatabaseService {
+case class DatabaseServiceLive(queries: QueriesConfig) extends DatabaseService {
 
-  override def initDb(seedUsers: Seq[UserRow]): Task[Unit] =
-    ZIO.fromFuture(_ => db.run(DatabaseQueries.init(seedUsers)))
+  override def initDb: Task[Unit] =
+    queries.init
 
   override def saveUser(user: User): Task[Int] =
-    ZIO.fromFuture(_ => db.run(DatabaseQueries.save(user)))
+    queries.save(user)
 
   override def findUser(name: String, age: Int, actualWork: String): Task[Option[User]] =
-    ZIO.blocking(ZIO.fromFuture(implicit ec => db.run(DatabaseQueries.find(name, age, actualWork)(ec))))
+    queries.find(name, age, actualWork)
 
   override def listAllUsers: Task[Seq[UserRow]] =
-    ZIO.fromFuture(_ => db.run(DatabaseQueries.listAll))
+    queries.listAll
 
   override def updateUser(oldName: String, oldAge: Int, oldWork: String, newUser: UserRow): Task[Int] =
-    ZIO.fromFuture(_ => db.run(DatabaseQueries.update(oldName, oldAge, oldWork, newUser)))
+    queries.update(oldName, oldAge, oldWork, newUser)
 
   override def deleteUser(name: String, age: Int, work: String): Task[Int] =
-    ZIO.fromFuture(_ => db.run(DatabaseQueries.delete(name, age, work)))
+    queries.delete(name, age, work)
 }

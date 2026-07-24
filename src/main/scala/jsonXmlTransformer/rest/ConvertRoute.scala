@@ -3,6 +3,7 @@ package jsonXmlTransformer.rest
 import jsonXmlTransformer.model.units.User
 import jsonXmlTransformer.service.convert.XmlMapperService
 import zio.ZIO
+import zio.http.Status._
 import zio.http._
 import zio.json._
 
@@ -16,18 +17,18 @@ case class ConvertRoute(xmlService: XmlMapperService) {
         response <- userDefault match {
           case Left(err) => ZIO.succeed {
             val errXml = xmlService.errorXml(s"Invalid JSON: $err")
-            Response(status = Status.BadRequest, body = Body.fromString(errXml).contentType(MediaType.application.xml))
+            Response(BadRequest, body = Body.fromString(errXml).contentType(MediaType.application.xml))
           }
           case Right(user) => if (user.name.equalsIgnoreCase("Виталий")) {
             ZIO.succeed {
               val errXml = xmlService.errorXml(s"This user does not exist.")
-              Response(status = Status.BadRequest, body = Body.fromString(errXml).contentType(MediaType.application.xml))
+              Response(BadRequest, body = Body.fromString(errXml).contentType(MediaType.application.xml))
             }
           } else {
             xmlService.toXml(user).map { xml =>
-              Response(status = Status.Ok, body = Body.fromString(xml).contentType(MediaType.application.xml))
+              Response(Ok, body = Body.fromString(xml).contentType(MediaType.application.xml))
             }.catchAll { err =>
-              ZIO.succeed(Response(status = Status.InternalServerError, body = Body.fromString(s"Error: ${err.getMessage}")))
+              ZIO.succeed(Response(InternalServerError, body = Body.fromString(s"Error: ${err.getMessage}")))
             }
           }
         }
