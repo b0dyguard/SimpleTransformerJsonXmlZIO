@@ -3,9 +3,10 @@ package jsonXmlTransformer.storage.table.tables
 
 import slick.jdbc.H2Profile.api._
 import jsonXmlTransformer.model.units.UserRow
+import slick.lifted.Tag
 
 
-class UsersTable(tag: slick.lifted.Tag) extends Table[UserRow](tag, "users") {
+class UsersTable(tag: Tag) extends Table[UserRow](tag, "users") {
   def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name")
   def age = column[Int]("age")

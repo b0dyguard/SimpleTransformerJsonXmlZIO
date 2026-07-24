@@ -12,8 +12,8 @@ case class DatabaseServiceLive(db: Database) extends DatabaseService {
   override def initDb(seedUsers: Seq[UserRow]): Task[Unit] =
     ZIO.fromFuture(_ => db.run(DatabaseQueries.init(seedUsers)))
 
-  override def saveUser(user: User): Task[Unit] =
-    ZIO.fromFuture(_ => db.run(DatabaseQueries.save(user))).unit
+  override def saveUser(user: User): Task[Int] =
+    ZIO.fromFuture(_ => db.run(DatabaseQueries.save(user)))
 
   override def findUser(name: String, age: Int, actualWork: String): Task[Option[User]] =
     ZIO.blocking(ZIO.fromFuture(implicit ec => db.run(DatabaseQueries.find(name, age, actualWork)(ec))))
