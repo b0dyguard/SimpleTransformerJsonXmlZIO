@@ -9,7 +9,9 @@ case class UserRow(
                   currentStatusActive: Boolean
                   )
 
+
 object UserRow {
+
   def toUser(userRow: UserRow): User = User(
     userRow.name,
     userRow.age,
@@ -17,4 +19,5 @@ object UserRow {
     if (userRow.previousWorks.isEmpty) Nil else userRow.previousWorks.split(", ").toList,
     userRow.currentStatusActive
   )
+
 }
