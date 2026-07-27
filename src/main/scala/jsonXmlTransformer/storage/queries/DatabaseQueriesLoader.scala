@@ -6,16 +6,14 @@ import slick.jdbc.H2Profile.api._
 import jsonXmlTransformer.model.units.{User, UserRow}
 import jsonXmlTransformer.storage.table.TableSchema._
 import zio._
-import scala.concurrent.ExecutionContext.Implicits.global
 
-object DatabaseQueries {
+object DatabaseQueriesLoader {
   val live: ZLayer[Database, Throwable, QueriesConfig] = ZLayer {
     for {
       db <- ZIO.service[Database]
       _ <- ZIO.logInfo("Initializing queries..")
 
-      init = ZIO.fromFuture { _ =>
-        db.run(
+      init = ZIO.fromFuture { _ => db.run(
           DBIO.seq(
             usersQuery.schema.drop.asTry,
             usersQuery.schema.create,
@@ -25,7 +23,7 @@ object DatabaseQueries {
       }
 
       save = (user: User) => {
-        val row = UserRow(
+        val userRow = UserRow(
           None,
           user.name,
           user.age,
@@ -33,15 +31,16 @@ object DatabaseQueries {
           if (user.previousWorks != null) user.previousWorks.mkString(", ") else "",
           user.currentStatusActive
         )
-        ZIO.fromFuture(_ => db.run(usersQuery += row))
+        ZIO.fromFuture(_ => db.run(usersQuery += userRow))
       }
 
-      find = (name: String, age: Int, actualWork: String) => ZIO.fromFuture { _ =>
-        db.run(usersQuery
-          .filter(u => u.name === name && u.age === age && u.actualWork === actualWork)
-          .result
-          .headOption
-          ).map(_.map(toUser))
+      find = (name: String, age: Int, actualWork: String) => ZIO.fromFuture { implicit ec =>
+        db.run {
+          usersQuery.filter(u => u.name === name && u.age === age && u.actualWork === actualWork)
+            .result
+            .headOption
+            .map(_.map(toUser))
+        }
       }
 
       listAll = ZIO.fromFuture(_ => db.run(usersQuery.result))

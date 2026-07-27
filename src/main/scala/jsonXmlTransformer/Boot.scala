@@ -8,7 +8,7 @@ import jsonXmlTransformer.service.convert.XmlMapperService
 import jsonXmlTransformer.service.database.DatabaseService
 import jsonXmlTransformer.service.server.HttpService
 import jsonXmlTransformer.storage.connection.DatabaseConnection
-import jsonXmlTransformer.storage.queries.DatabaseQueries
+import jsonXmlTransformer.storage.queries.DatabaseQueriesLoader
 import zio._
 import zio.http._
 import zio.logging.backend.SLF4J
@@ -44,7 +44,7 @@ object Boot extends ZIOAppDefault {
       TypesafeConfigLoader.live,
       ConfigService.live,
       DatabaseConnection.live,
-      DatabaseQueries.live,
+      DatabaseQueriesLoader.live,
       DatabaseService.live,
       JacksonXmlMapper.live,
       XmlMapperService.live,
