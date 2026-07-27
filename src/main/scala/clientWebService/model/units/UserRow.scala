@@ -20,4 +20,7 @@ object UserRow {
     userRow.currentStatusActive
   )
 
+  def tupled: ((Option[Int], String, Int, String, String, Boolean)) => UserRow =
+    (UserRow.apply _).tupled
+
 }

@@ -2,9 +2,10 @@ package clientWebService.storage.queries
 
 import clientWebService.config.QueriesConfig
 import clientWebService.model.units.UserRow.toUser
-import slick.jdbc.H2Profile.api._
 import clientWebService.model.units.{User, UserRow}
 import clientWebService.storage.table.TableSchema._
+
+import slick.jdbc.H2Profile.api._
 import zio._
 
 object DatabaseQueriesLoader {
