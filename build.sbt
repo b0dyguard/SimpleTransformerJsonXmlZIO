@@ -17,16 +17,17 @@ lazy val root = (project in file("."))
       "com.fasterxml.jackson.dataformat" % "jackson-dataformat-xml"      	% "2.22.1",
       "com.fasterxml.jackson.module"    %% "jackson-module-scala"        	% "2.22.1",
 
-      "ch.qos.logback"          	% "logback-classic"            					% "1.5.38",
+      "ch.qos.logback"          	% "logback-classic"            					% "1.6.1",
       "net.logstash.logback"      % "logstash-logback-encoder"   	      	% "9.0",
       "dev.zio"            				%% "zio-logging"              					% "2.5.3",
       "dev.zio"              			%% "zio-logging-slf4j"       			  		% "2.5.3"
-    )
+    ),
 
-    /*scalacOptions ++= Seq(
-      "-deprecation",
-      "-encoding", "UTF-8",
-      "-feature",
-      "-unchecked"
-    )*/
+    assembly / mainClass := Some("clientWebService.Boot"),
+    assembly / assemblyMergeStrategy := {
+      case PathList("META-INF", "services", xs @ _*) => MergeStrategy.concat
+      case PathList("META-INF", xs @ _*)             => MergeStrategy.discard
+      case "reference.conf"                          => MergeStrategy.concat
+      case x                                         => MergeStrategy.first
+    }
   )
