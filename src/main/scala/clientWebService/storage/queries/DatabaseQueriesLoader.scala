@@ -1,10 +1,10 @@
 package clientWebService.storage.queries
 
 import clientWebService.config.QueriesConfig
+import clientWebService.model.units.User.toUserRow
 import clientWebService.model.units.UserRow.toUser
 import clientWebService.model.units.{User, UserRow}
 import clientWebService.storage.table.TableSchema._
-
 import slick.jdbc.H2Profile.api._
 import zio._
 
@@ -24,14 +24,7 @@ object DatabaseQueriesLoader {
       }
 
       save = (user: User) => {
-        val userRow = UserRow(
-          None,
-          user.name,
-          user.age,
-          user.actualWork,
-          if (user.previousWorks != null) user.previousWorks.mkString(", ") else "",
-          user.currentStatusActive
-        )
+        val userRow = toUserRow(user)
         ZIO.fromFuture(_ => db.run(usersQuery += userRow))
       }
 

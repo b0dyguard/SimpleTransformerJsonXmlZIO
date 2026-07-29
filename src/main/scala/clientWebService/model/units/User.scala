@@ -25,5 +25,14 @@ case class User(
 
 object User {
   implicit val codec: JsonCodec[User] = DeriveJsonCodec.gen[User]
+
+  def toUserRow(user: User) = UserRow(
+    None,
+    user.name,
+    user.age,
+    user.actualWork,
+    if (user.previousWorks != null) user.previousWorks.mkString(", ") else "",
+    user.currentStatusActive
+  )
 }
 
